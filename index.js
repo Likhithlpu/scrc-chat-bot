@@ -123,7 +123,8 @@ class Chatbox {
           chatBox: document.querySelector('.chatbox__support'),
           sendButton: document.querySelector('.send__button')
       }
-
+      // Add a reference to the minimize button
+      this.args.minimizeButton = document.querySelector('.minimize-btn');
       this.state = false;
       this.messages = [];
   }
@@ -141,6 +142,8 @@ class Chatbox {
               this.onSendButton(chatBox)
           }
       })
+
+      this.args.minimizeButton.addEventListener('click', () => this.toggleState(this.args.chatBox));
   }
 
   toggleState(chatbox) {
