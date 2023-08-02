@@ -46,10 +46,10 @@ function output(input) {
     product = compare(prompts, replies, text);
   } else if (text.match(/thank/gi)) {
     product = "You're welcome!"
-  } else if (text.match(/(corona|covid|virus)/gi)) {
+  } //else if (text.match(/(corona|covid|virus)/gi)) {
     // If no match, check if message contains `coronavirus`
-    product = coronavirus[Math.floor(Math.random() * coronavirus.length)];
-  } else {
+    //product = coronavirus[Math.floor(Math.random() * coronavirus.length)];
+   else {
     // If all else fails: random alternative
     product = alternative[Math.floor(Math.random() * alternative.length)];
   }
@@ -122,7 +122,7 @@ class Chatbox {
           openButton: document.querySelector('.chatbox__button'),
           chatBox: document.querySelector('.chatbox__support'),
           sendButton: document.querySelector('.send__button'),
-          minimizeButton: document.querySelector('.minimize__button'), // New minimize button
+          minimizeButton: document.querySelector('.minimize-btn'), // New minimize button
 
       };
       
@@ -132,11 +132,11 @@ class Chatbox {
   }
 
   display() {
-      const {openButton, chatBox, sendButton} = this.args;
+      const {openButton, chatBox, sendButton,minimizeButton} = this.args;
       
       
       openButton.addEventListener('click', () => this.toggleState(chatBox))
-      minimizeButton.addEventListener('click', () => this.toggleState(chatBox)); // Minimize button event listener
+      minimizeButton.addEventListener('click', () => this.toggleState(chatBox)) // Minimize button event listener
       sendButton.addEventListener('click', () => this.onSendButton(chatBox))
 
       const node = chatBox.querySelector('input');
