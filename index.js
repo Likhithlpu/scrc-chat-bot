@@ -105,7 +105,7 @@ function addChat(input, product) {
   // Fake delay to seem "real"
   setTimeout(() => {
     botText.innerText = `${product}`;
-    textToSpeech(product)
+    //textToSpeech(product)
   }, 2000
   )
 
@@ -121,19 +121,22 @@ class Chatbox {
       this.args = {
           openButton: document.querySelector('.chatbox__button'),
           chatBox: document.querySelector('.chatbox__support'),
-          sendButton: document.querySelector('.send__button')
-      }
-      // Add a reference to the minimize button
-      this.args.minimizeButton = document.querySelector('.minimize-btn');
+          sendButton: document.querySelector('.send__button'),
+          minimizeButton: document.querySelector('.minimize__button'), // New minimize button
+
+      };
+      
+
       this.state = false;
       this.messages = [];
   }
 
   display() {
       const {openButton, chatBox, sendButton} = this.args;
-
+      
+      
       openButton.addEventListener('click', () => this.toggleState(chatBox))
-
+      minimizeButton.addEventListener('click', () => this.toggleState(chatBox)); // Minimize button event listener
       sendButton.addEventListener('click', () => this.onSendButton(chatBox))
 
       const node = chatBox.querySelector('input');
@@ -142,8 +145,6 @@ class Chatbox {
               this.onSendButton(chatBox)
           }
       })
-
-      this.args.minimizeButton.addEventListener('click', () => this.toggleState(this.args.chatBox));
   }
 
   toggleState(chatbox) {

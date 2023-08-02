@@ -5,29 +5,24 @@ const prompts = [
   ["ah", "yes", "ok", "okay", "nice"],
   ["bye", "good bye", "goodbye", "see you later"],
   ['thanks','thank you','thanku'],
-  //["Can i know the air quality at Vindhya Block?","What is the humidity at the hostel?"]
+  ["can i know the air quality at vindhya block?","what is the humidity at the hostel?"]
 ]
 
 // Possible responses, in corresponding order
 
 const replies = [
   ["Hello!", "Hi!", "Hey!", "Hi there!"],
-  [
-    "I fetch details from the dashboard",
-    "I help find the parameters of different locations"
-  ],
+  ["I fetch details from the dashboard",
+    "I help find the parameters of different locations"],
   ["ok cool", "ok","ya"],
   ["Bye", "Goodbye", "See you later"],
   ["Anytime","Your welcome"],
-  //["The corresponding calculated data is given","The value is given"]
+  ["The corresponding calculated data is given"]
 ]
 
 // Random for any other user input
 
 const alternative = [
-  "Same",
-  "Go on...",
-  "Bro...",
   "Try again",
   "I'm listening...",
   "I don't understand :/"
