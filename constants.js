@@ -5,7 +5,7 @@ const prompts = [
   ["ah", "yes", "ok", "okay", "nice"],
   ["bye", "good bye", "goodbye", "see you later"],
   ['thanks','thank you','thanku'],
-  ["Can i know the air quality at Vindhya Block?","What is the humidity at the hostel?"],
+  //["Can i know the air quality at Vindhya Block?","What is the humidity at the hostel?"]
 ]
 
 // Possible responses, in corresponding order
@@ -19,7 +19,7 @@ const replies = [
   ["ok cool", "ok","ya"],
   ["Bye", "Goodbye", "See you later"],
   ["Anytime","Your welcome"],
-  ["The corresponding calculated data is given"]
+  //["The corresponding calculated data is given","The value is given"]
 ]
 
 // Random for any other user input

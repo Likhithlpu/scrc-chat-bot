@@ -5,7 +5,7 @@
 }
 
 body {
-    font-family: 'Nunito', sans-serif;
+    font-family: Calibri, sans-serif;
     font-weight: 400;
     font-size: 100%;
     background: #F1F1F1;
@@ -235,15 +235,16 @@ body {
 }
 
 .bot {
-	font-family: Consolas, 'Courier New', Menlo, source-code-pro, Monaco,  
-	monospace;
+    font-family: Calibri, sans-serif;
 }
 
 .avatar {
 	height: 25px;
+    margin: 7px;
 }
 
 .response {
+    font-family: Calibri, sans-serif;
 	display: flex;
 	align-items: center;
 	margin: 1%;
