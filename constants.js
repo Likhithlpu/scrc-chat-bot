@@ -6,6 +6,7 @@ const prompts = [
   ["bye", "good bye", "goodbye", "see you later"],
   ['thanks','thank you','thanku'],
   ["can i know the air quality at vindhya block?","what is the humidity at the hostel?"]
+
 ]
 
 // Possible responses, in corresponding order

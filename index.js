@@ -124,6 +124,8 @@ class Chatbox {
           sendButton: document.querySelector('.send__button'),
           minimizeButton: document.querySelector('.minimize-btn'), // New minimize button
 
+
+
       };
       
 
