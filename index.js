@@ -41,7 +41,7 @@ function sendMessage() {
 function generateUrl(input,value1,value2) {
   const url = `http://localhost:4000/data/${value1}/${value2}`;
   const response = `Here is the generated URL: ${url}`;
-  addChat(input, response);
+  //addChat(input, response);
 
   return url;
 
@@ -59,7 +59,7 @@ function processInput(input) {
       value2 = inputParts[3];
       const generatedUrl = generateUrl(input,value1, value2);
       //addChat(input,`Generating url for ${value1} ${value2}`);
-      fetchExternalData(generatedUrl);
+      fetchExternalData(generatedUrl,input);
     } else {
       output("Invalid input for generating URL. Please use 'generate url <value1> <value2>'.");
     }
@@ -104,7 +104,7 @@ function output(input) {
   addChat(input, product);
 }
 
-function fetchExternalData(url) {
+function fetchExternalData(url,input) {
   var myHeaders = new Headers();
   myHeaders.append("X-M2M-Origin", "iiith_guest:iiith_guest");
   myHeaders.append("Accept", "application/json");
@@ -118,18 +118,18 @@ function fetchExternalData(url) {
   fetch(url, requestOptions)
     .then(response => response.json())
     .then(result => {
-      printFetchedData(result);
+      printFetchedData(result,input);
     }
       )
     .catch(error => console.log('error', error));
 }
 
-function printFetchedData(data) {
+function printFetchedData(data,input) {
   // Convert the data to a JSON string for printing
   const dataString = JSON.stringify(data, null, 2);
   
   // Print the data in the chatbox
-  addChat("Fetched Data", dataString);
+  addChat(input, dataString);
 }
 function compare(promptsArray, repliesArray, string) {
   let reply;
