@@ -1,3 +1,15 @@
+const app_name='Dodac API';
+const allowed_hosts= ['*'];
+const root_path=" ";
+
+class Config{
+  constructor(){
+    this.env_file=".env";
+  }
+}
+
+
+
 document.addEventListener("DOMContentLoaded", () => {
   const inputField = document.getElementById("input");
   const sendButton = document.getElementById("messages");
@@ -6,7 +18,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.code === "Enter") {
       let input = inputField.value;
       inputField.value = "";
-      output(input);
+      // output(input);
+      processInput(input);
     }
   });
 
@@ -15,13 +28,31 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+let value1 = "";
+let value2 = "";
 function sendMessage() {
   const inputField = document.getElementById("input");
   let input = inputField.value;
   inputField.value = "";
-  output(input);
+  // output(input);
+  processInput(input);
 }
-
+function processInput(input) {
+  if (input.startsWith("generate url")) {
+    const inputParts = input.split(" ");
+    if (inputParts.length >= 4) {
+      value1 = inputParts[2];
+      value2 = inputParts[3];
+      const generatedUrl = generateUrl(value1, value2);
+      fetchExternalData(generatedUrl);
+    } else {
+      output("Invalid input for generating URL. Please use 'generate url <value1> <value2>'.");
+    }
+  } else {
+    //let response = getResponseForInput(input);
+    output(input);
+  }
+}
 
 
 function output(input) {
@@ -57,6 +88,34 @@ function output(input) {
   // Update DOM
   addChat(input, product);
 }
+function generateUrl(value1,value2) {
+  const url = `http://onem2m.iiit.ac.in:443/~/in-cse/in-name/${value1}/${value2}/Data/la`;
+  const response = `Here is the generated URL: ${url}`;
+  addChat(input, response);
+  return url;
+
+  
+
+  // Reset the stored values
+  // value1 = "";
+  // value2 = "";
+}
+function fetchExternalData(url) {
+  var myHeaders = new Headers();
+  myHeaders.append("X-M2M-Origin", "iiith_guest:iiith_guest");
+  myHeaders.append("Accept", "application/json");
+
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
+
+  fetch(url, requestOptions)
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.log('error', error));
+}
 
 function compare(promptsArray, repliesArray, string) {
   let reply;
@@ -85,15 +144,15 @@ function addChat(input, product) {
   let userDiv = document.createElement("div");
   userDiv.id = "user";
   userDiv.className = "user response";
-  userDiv.innerHTML = `<img src="images/user.png" class="avatar"><span>${input}</span>`;
+  userDiv.innerHTML = `<span>${input}</span>`;
   messagesContainer.appendChild(userDiv);
 
   let botDiv = document.createElement("div");
   let botImg = document.createElement("img");
   let botText = document.createElement("span");
   botDiv.id = "bot";
-  botImg.src = "images/bot-mini.png";
-  botImg.className = "avatar";
+  //botImg.src = "images/bot-mini.png";
+  //botImg.className = "avatar";
   botDiv.className = "bot response";
   botText.innerText = "Typing...";
   botDiv.appendChild(botText);
@@ -123,6 +182,8 @@ class Chatbox {
           chatBox: document.querySelector('.chatbox__support'),
           sendButton: document.querySelector('.send__button'),
           minimizeButton: document.querySelector('.minimize-btn'), // New minimize button
+
+
 
       };
       
