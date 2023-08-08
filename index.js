@@ -37,13 +37,28 @@ function sendMessage() {
   // output(input);
   processInput(input);
 }
+
+function generateUrl(input,value1,value2) {
+  const url = `http://localhost:4000/data/${value1}/${value2}`;
+  const response = `Here is the generated URL: ${url}`;
+  addChat(input, response);
+
+  return url;
+
+  
+
+  // Reset the stored values
+  // value1 = "";
+  // value2 = "";
+}
 function processInput(input) {
   if (input.startsWith("generate url")) {
     const inputParts = input.split(" ");
     if (inputParts.length >= 4) {
       value1 = inputParts[2];
       value2 = inputParts[3];
-      const generatedUrl = generateUrl(value1, value2);
+      const generatedUrl = generateUrl(input,value1, value2);
+      //addChat(input,`Generating url for ${value1} ${value2}`);
       fetchExternalData(generatedUrl);
     } else {
       output("Invalid input for generating URL. Please use 'generate url <value1> <value2>'.");
@@ -88,18 +103,7 @@ function output(input) {
   // Update DOM
   addChat(input, product);
 }
-function generateUrl(value1,value2) {
-  const url = `http://localhost:4000/data/${value1}/${value2}`;
-  //const response = `Here is the generated URL: ${url}`;
-  //addChat(input, response);
-  return url;
 
-  
-
-  // Reset the stored values
-  // value1 = "";
-  // value2 = "";
-}
 function fetchExternalData(url) {
   var myHeaders = new Headers();
   myHeaders.append("X-M2M-Origin", "iiith_guest:iiith_guest");
@@ -112,11 +116,21 @@ function fetchExternalData(url) {
   };
 
   fetch(url, requestOptions)
-    .then(response => response.text())
-    .then(result => console.log(result))
+    .then(response => response.json())
+    .then(result => {
+      printFetchedData(result);
+    }
+      )
     .catch(error => console.log('error', error));
 }
 
+function printFetchedData(data) {
+  // Convert the data to a JSON string for printing
+  const dataString = JSON.stringify(data, null, 2);
+  
+  // Print the data in the chatbox
+  addChat("Fetched Data", dataString);
+}
 function compare(promptsArray, repliesArray, string) {
   let reply;
   let replyFound = false;
