@@ -1,0 +1,21 @@
+{
+    "pgConfig": {
+      "user": "postgres",
+      "host": "127.0.0.1",
+      "database": "demo_data",
+      "password": "root123",
+      "port": 5432
+    },
+    "queries": [
+      {
+        "name": "query1",
+        "query": "SELECT payment_id,amount FROM payments LIMIT 100"
+      },
+      {
+        "name": "query2",
+        "query": "SELECT * FROM payments LIMIT 100"
+      }
+      
+    ]
+  }
+  
