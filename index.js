@@ -89,9 +89,9 @@ function output(input) {
   addChat(input, product);
 }
 function generateUrl(value1,value2) {
-  const url = `http://onem2m.iiit.ac.in:443/~/in-cse/in-name/${value1}/${value2}/Data/la`;
-  const response = `Here is the generated URL: ${url}`;
-  addChat(input, response);
+  const url = `http://localhost:4000/data/${value1}/${value2}`;
+  //const response = `Here is the generated URL: ${url}`;
+  //addChat(input, response);
   return url;
 
   
