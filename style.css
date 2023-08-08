@@ -181,7 +181,7 @@ body {
     border-radius: 10px;
     padding: 8px;
     margin: 5px;
-    align-self: flex-start;
+    align-self: flex-end;
   }
   
   .bot.response {
@@ -190,12 +190,12 @@ body {
     border-radius: 10px;
     padding: 8px;
     margin: 5px;
-    align-self: flex-end;
+    align-self: flex-start;
   }
 
 
 #bot {
-    margin-left: auto;
+    margin-right: auto;
 }
 
 .bot {
