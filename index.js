@@ -52,7 +52,7 @@ function generateUrl(input,value1,value2) {
   // value2 = "";
 }
 function processInput(input) {
-  if (input.startsWith("generate url")) {
+  if (input.startsWith("generate data")) {
     const inputParts = input.split(" ");
     if (inputParts.length >= 4) {
       value1 = inputParts[2];
@@ -61,7 +61,7 @@ function processInput(input) {
       //addChat(input,`Generating url for ${value1} ${value2}`);
       fetchExternalData(generatedUrl,input);
     } else {
-      output("Invalid input for generating URL. Please use 'generate url <value1> <value2>'.");
+      output("Invalid input for generating data. Please use 'generate data <value1> <value2>'.");
     }
   } else {
     //let response = getResponseForInput(input);
