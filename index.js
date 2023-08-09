@@ -124,12 +124,23 @@ function fetchExternalData(url,input) {
     .catch(error => console.log('error', error));
 }
 
-function printFetchedData(data,input) {
-  // Convert the data to a JSON string for printing
-  const dataString = JSON.stringify(data, null, 2);
+// function printFetchedData(data,input) {
+//   // Convert the data to a JSON string for printing
+//   const dataString = JSON.stringify(data, null, 2);
   
-  // Print the data in the chatbox
-  addChat(input, dataString);
+//   // Print the data in the chatbox
+//   addChat(input, dataString);
+// }
+function printFetchedData(data, input) {
+  let formattedData = "";
+
+  for (const key in data) {
+    if (Object.prototype.hasOwnProperty.call(data, key)) {
+      formattedData += `${key}: ${data[key]}\n`;
+    }
+  }
+
+  addChat(input, formattedData);
 }
 function compare(promptsArray, repliesArray, string) {
   let reply;
