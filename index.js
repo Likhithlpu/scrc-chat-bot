@@ -136,8 +136,16 @@ function printFetchedData(data, input) {
 
   for (const key in data) {
     if (Object.prototype.hasOwnProperty.call(data, key)) {
+      if(key=== "Timestamp'"){
+
+        const epochTimestamp =data[key];
+        const normalTime =new Date(epochTimestamp *1000).toLocaleString();
+        formattedData += `${key}: ${normalTime}\n`;
+      }
+      else{
+      
       formattedData += `${key}: ${data[key]}\n`;
-    }
+    }}
   }
 
   addChat(input, formattedData);
