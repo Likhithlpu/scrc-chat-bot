@@ -177,6 +177,26 @@ body {
 
 
 
+
+  .option-button {
+    display: block; /* Buttons are displayed as blocks to control width */
+    margin: 5px 0; /* Margin for spacing between buttons */
+    padding: 10px 20px; /* Padding for button content */
+    background-color: #f6f6f6; /* Background color */
+    color: rgb(0, 0, 0); /* Text color */
+    border: black; /* Remove button border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Show pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition for background color change */
+  }
+  
+  /* Change button background color on hover */
+  .option-button:hover {
+    background-color: #ffffff;
+  }
+
+
+
 #bot {
     margin-left: auto;
 }
