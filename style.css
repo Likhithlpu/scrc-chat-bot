@@ -218,6 +218,26 @@ body {
     margin: 1%;
 }
 
+/* Styling for option buttons */
+.chatbox__option {
+    padding: 8px 15px;
+    background-color: #f0f0f0;
+    border: none;
+    color: #123462;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin: 5px; /* Add margin between options */
+}
+
+.chatbox__option:hover {
+    background-color: #e0e0e0;
+    color: #0f265b;
+}
+
+
+
+
 /* Mobile */
 @media only screen and (max-width: 980px) {
     .container {

@@ -1,14 +1,19 @@
-const app_name='Dodac API';
-const allowed_hosts= ['*'];
-const root_path=" ";
+// const app_name='Dodac API';
+// const allowed_hosts= ['*'];
+// const root_path=" ";
 
-class Config{
-  constructor(){
-    this.env_file=".env";
-  }
-}
+// class Config{
+//   constructor(){
+//     this.env_file=".env";
+//   }
+// }
 
 import { conversationTree ,extractMessages} from './conversation.js';
+//import { buildingShortForms,verticalShortForms } from './shortforms.js';
+
+let currentConversationNode = conversationTree;
+let userInput = "";
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const inputField = document.getElementById("input");
@@ -32,19 +37,27 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-let value1 = "";
-let value2 = "";
+// let value1 = "";
+// let value2 = "";
+
+// let userInput = "";
+
 function sendMessage() {
   const inputField = document.getElementById("input");
   let input = inputField.value;
   inputField.value = "";
-  let currentConversationNode="";
-
-  if (currentConversationNode.nodes && currentConversationNode.nodes[input]) {
+ // let currentConversationNode="";
+ console.log("User Input:", input);
+  if (currentConversationNode.input) {
+    userInput = input; // Store user input
+    console.log(userInput)
+    output(currentConversationNode.message, currentConversationNode.options);
+  } else if (currentConversationNode.nodes && currentConversationNode.nodes[input]) {
     // Transition to the next node based on user input
     currentConversationNode = currentConversationNode.nodes[input];
     output(currentConversationNode.message, currentConversationNode.options);
   }
+
   //processInput(input);
 }
 
@@ -91,8 +104,9 @@ function output(message, options) {
 
   setTimeout(() => {
     botText.innerText = message;
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-  
+   userInput = message;
+    //console.log(userInput);
+    
 
   if (options) {
     let optionsDiv = document.createElement("div");
@@ -109,20 +123,75 @@ function output(message, options) {
 
     messagesContainer.appendChild(optionsDiv);
   }
+  messagesContainer.scrollTop = messagesContainer.scrollHeight;
 },1000);
+
   
   // Scroll to the bottom of the chat
-  messagesContainer.scrollTop = messagesContainer.scrollHeight;
-
+  //messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  //if (currentConversationNode.next === "FinalNode" && userInput) {
+    if (userInput) {
+      //console.log(userInput);
+      //console.log(selectedBuildingIdentifier);
+      //console.log(selectedVerticalIdentifier);
+    const url = constructUrl(userInput, selectedVerticalIdentifier, selectedBuildingIdentifier);
+    let urlDiv = document.createElement("div");
+    let urlText = document.createElement("span");
+    urlDiv.id = "url";
+    urlDiv.className = "url response";
+    urlText.innerText = `Generated URL: ${url}`;
+    // urlText.innerText = url; // Display the generated URL
+    urlDiv.appendChild(urlText);
+    messagesContainer.appendChild(urlDiv);
+  }
   
 }
 
-function handleOptionClick(nextNode) {
-  let currentConversationNode="";
+// function handleOptionClick(nextNode) {
+//   let currentConversationNode="";
+//   currentConversationNode = conversationTree.nodes[nextNode];
+//   addChat(currentConversationNode.message, currentConversationNode.options);
+// }
+
+let selectedBuildingIdentifier = "";
+let selectedVerticalIdentifier = "";
+
+function handleOptionClick(nextNode, identifier) {
   currentConversationNode = conversationTree.nodes[nextNode];
+  //console.log("Entering handleOptionClick", nextNode, identifier);
+ // console.log(identifier);
+  if (identifier) {
+    if (currentConversationNode === conversationTree.nodes.NodeSpecificNode) {
+      selectedVerticalIdentifier = identifier;
+      console.log(selectedVerticalIdentifier)
+      console.log("entered vertical condition");
+    }
+     else if (currentConversationNode === conversationTree.nodes.NodeSp) {
+      selectedBuildingIdentifier = identifier;
+      console.log(selectedBuildingIdentifier)
+      console.log("entered building condition");
+    }
+    else{
+      console.log("entered no condition");
+    }
+  }
+  // if (currentConversationNode === conversationTree.nodes.NodeSp) {
+  //   selectedBuildingIdentifier = identifier;
+  // } else if (currentConversationNode === conversationTree.nodes.NodeSpecificNode) {
+  //   selectedVerticalIdentifier = identifier;
+  // }
+  if (nextNode === "FinalNode") {
+    // If transitioning to the FinalNode, clear the user input
+    userInput = "";
+  }
+ console.log(currentConversationNode);
   addChat(currentConversationNode.message, currentConversationNode.options);
 }
 
+function constructUrl(nodeId, verticalIdentifier, buildingIdentifier) {
+  // Replace with your actual URL construction logic
+  return `http://example.com/data/${buildingIdentifier}/${verticalIdentifier}/${nodeId}`;
+}
 
 // function output(input) {
 //   let product;
@@ -279,7 +348,8 @@ function addChat(message, options) {
       for (const option of options) {
         let optionButton = document.createElement("button");
         optionButton.textContent = option.text;
-        optionButton.addEventListener("click", () => handleOptionClick(option.next));
+        optionButton.className = "chatbox__option";
+        optionButton.addEventListener("click", () => handleOptionClick(option.next, option.identifier));
         optionsDiv.appendChild(optionButton);
       }
 
