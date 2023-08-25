@@ -1,86 +1,61 @@
-const app_name='Dodac API';
-const allowed_hosts= ['*'];
-const root_path=" ";
+import { conversationTree ,extractMessages} from './conversation_chatbot.js';
 
-class Config{
-  constructor(){
-    this.env_file=".env";
-  }
-}
-
-import { conversationTree ,extractMessages} from './conversation.js';
+let currentConversationNode = conversationTree;
+let userInput = "";
 
 document.addEventListener("DOMContentLoaded", () => {
   const inputField = document.getElementById("input");
   const sendButton = document.getElementById("messages");
+  //const sendButton = document.querySelector('.send__button');
+  //let userInput = "";
 
-
-  let currentConversationNode = conversationTree;
+  //let currentConversationNode = conversationTree;
   output(currentConversationNode.message, currentConversationNode.options);
 
   inputField.addEventListener("keydown", (e) => {
     if (e.code === "Enter") {
       let input = inputField.value;
       inputField.value = "";
+      userInput = input;
+      console.log("Enter button",userInput)
+      updateChatAndConstructString(userInput)
+      //sendMessage();
       output(input);
       //processInput(input);
     }
   });
 
-  sendButton.addEventListener("click", () => {
-    sendMessage();
-  });
+  //sendButton.addEventListener('click', () => this.onSendButton(this.args.chatBox));
+
+  // sendButton.addEventListener("click", () => {
+  //   let input = inputField.value;
+  //   inputField.value = "";
+  //   userInput = input; 
+  //   sendMessage();
+  // });
 });
 
-let value1 = "";
-let value2 = "";
 function sendMessage() {
   const inputField = document.getElementById("input");
   let input = inputField.value;
   inputField.value = "";
-  let currentConversationNode="";
-
-  if (currentConversationNode.nodes && currentConversationNode.nodes[input]) {
+ // let currentConversationNode="";
+ //console.log("User Input:", input);
+  if (currentConversationNode.input) {
+    userInput = input; // Store user input
+    console.log(userInput)
+    //output(currentConversationNode.message, currentConversationNode.options);
+  } else if (currentConversationNode.nodes && currentConversationNode.nodes[input]) {
     // Transition to the next node based on user input
     currentConversationNode = currentConversationNode.nodes[input];
     output(currentConversationNode.message, currentConversationNode.options);
   }
+
   //processInput(input);
 }
 
-// function generateUrl(input,value1,value2) {
-//   const url = `http://localhost:4000/data/${value1}/${value2}`;
-//   const response = `Here is the generated URL: ${url}`;
-//   //addChat(input, response);
-
-//   return url;
-
-  
-
-//   // Reset the stored values
-//   // value1 = "";
-//   // value2 = "";
-// }
-// function processInput(input) {
-//   if (input.startsWith("generate data")) {
-//     const inputParts = input.split(" ");
-//     if (inputParts.length >= 4) {
-//       value1 = inputParts[2];
-//       value2 = inputParts[3];
-//       // const generatedUrl = generateUrl(input,value1, value2);
-//       //addChat(input,`Generating url for ${value1} ${value2}`);
-//       fetchExternalData(generatedUrl,input);
-//     } else {
-//       output("Invalid input for generating data. Please use 'generate data <value1> <value2>'.");
-//     }
-//   } else {
-//     //let response = getResponseForInput(input);
-//     output(input);
-//   }
-// }
 function output(message, options) {
   const messagesContainer = document.getElementById("messages");
-
   let botDiv = document.createElement("div");
   let botText = document.createElement("span");
   botDiv.id = "bot";
@@ -91,8 +66,9 @@ function output(message, options) {
 
   setTimeout(() => {
     botText.innerText = message;
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-  
+   //userInput = message;
+    //console.log(userInput);
+    
 
   if (options) {
     let optionsDiv = document.createElement("div");
@@ -102,108 +78,116 @@ function output(message, options) {
     for (const option of options) {
       let optionButton = document.createElement("button");
       optionButton.textContent = option.text;
-      optionButton.addEventListener("click", () => handleOptionClick(option.next));
+      optionButton.className = "chatbox__option";
+      optionButton.addEventListener("click", () =>
+        handleOptionClick(option.next, option.identifier)
+      );
       optionsDiv.appendChild(optionButton);
-      optionsDiv.appendChild(document.createElement("br"));
     }
 
     messagesContainer.appendChild(optionsDiv);
   }
-},1000);
-  
-  // Scroll to the bottom of the chat
-  messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
   
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }, 1000);
 }
 
-function handleOptionClick(nextNode) {
-  let currentConversationNode="";
+let selectedVerticalIdentifier = "";
+let selectedBuildingIdentifier = "";
+let selectedFloorIdentifier = "";
+//let selectedNodeIdentifier = "";
+
+function handleOptionClick(nextNode, identifier) {
   currentConversationNode = conversationTree.nodes[nextNode];
+
+  if (identifier) {
+    if (currentConversationNode === conversationTree.nodes.NodeSp) {
+      selectedVerticalIdentifier = identifier;
+    } else if (currentConversationNode === conversationTree.nodes.FloorNode) {
+      selectedBuildingIdentifier = identifier;
+    } else if (currentConversationNode === conversationTree.nodes.FinalNode) {
+      selectedFloorIdentifier = identifier;
+      //updateChatAndConstructString(userInput);
+    }
+    // else{
+    //   userInput = input;
+    // }
+    // else if (currentConversationNode === conversationTree.nodes.CommonNode) {
+    //   selectedNodeIdentifier = userInput;
+    //   console.log("if condition",selectedNodeIdentifier)
+    // }
+  }
+
+  // if (nextNode === "CommonNode") {
+  //   // If transitioning to the FinalNode, capture the entered node ID
+  //   selectedNodeIdentifier = userInput;
+  //   console.log(selectedNodeIdentifier)
+  // }
+
+  // Update the chat and construct the concatenated string
+  //updateChatAndConstructString();
+
+  // Continue with displaying messages and options
   addChat(currentConversationNode.message, currentConversationNode.options);
 }
 
-
-// function output(input) {
-//   let product;
-
-//   // Regex remove non word/space chars
-//   // Trim trailing whitespce
-//   // Remove digits - not sure if this is best
-//   // But solves problem of entering something like 'hi1'
-
-//   let text = input.toLowerCase().replace(/[^\w\s]/gi, "").replace(/[\d]/gi, "").trim();
-//   text = text
-//     .replace(/ a /g, " ")   // 'tell me a story' -> 'tell me story'
-//     .replace(/i feel /g, "")
-//     .replace(/whats/g, "what is")
-//     .replace(/please /g, "")
-//     .replace(/ please/g, "")
-//     .replace(/r u/g, "are you");
-
-//   if (compare(prompts, replies, text)) { 
-//     // Search for exact match in `prompts`
-//     product = compare(prompts, replies, text);
-//   } else if (text.match(/thank/gi)) {
-//     product = "You're welcome!"
-//   } //else if (text.match(/(corona|covid|virus)/gi)) {
-//     // If no match, check if message contains `coronavirus`
-//     //product = coronavirus[Math.floor(Math.random() * coronavirus.length)];
-//    else {
-//     // If all else fails: random alternative
-//     product = alternative[Math.floor(Math.random() * alternative.length)];
-//   }
-
-//   // Update DOM
-//   addChat(input, product);
-// }
-
-// // function fetchExternalData(url,input) {
-// //   var myHeaders = new Headers();
-// //   myHeaders.append("X-M2M-Origin", "iiith_guest:iiith_guest");
-// //   myHeaders.append("Accept", "application/json");
-
-// //   var requestOptions = {
-// //     method: 'GET',
-// //     headers: myHeaders,
-// //     redirect: 'follow'
-// //   };
-
-// //   fetch(url, requestOptions)
-// //     .then(response => response.json())
-// //     .then(result => {
-// //       printFetchedData(result,input);
-// //     }
-// //       )
-// //     .catch(error => console.log('error', error));
-// // }
-
-// // // function printFetchedData(data,input) {
-// // //   // Convert the data to a JSON string for printing
-// // //   const dataString = JSON.stringify(data, null, 2);
+function updateChatAndConstructString(updateduserInput) {
   
-// // //   // Print the data in the chatbox
-// // //   addChat(input, dataString);
-// // // }
-// // function printFetchedData(data, input) {
-// //   let formattedData = "";
+    // Construct the concatenated string based on selected identifiers
+  //const finalString = `${selectedVerticalIdentifier}-${selectedBuildingIdentifier}${selectedFloorIdentifier}-${selectedNodeIdentifier}`;
+  //console.log("Inside function",updateduserInput)
+  const firstString = `AE-${selectedVerticalIdentifier}`;
+  const finalString = `${selectedVerticalIdentifier}-${selectedBuildingIdentifier}${selectedFloorIdentifier}-${updateduserInput}`;
+  // Update the chat or display the finalString wherever you want
+  // For example, you can display it in the chatbox:
+  console.log("First String:", firstString);
+  console.log("Second String:", finalString);
+  const apiUrl = `http://localhost:4000/data/${firstString}/${finalString}`;
+  console.log("API URL:", apiUrl);
+  if (currentConversationNode === conversationTree.nodes.FinalNode) {
+    fetchExternalData(apiUrl, finalString);
+  }
+  
+  // const messagesContainer = document.getElementById("messages");
+  // let finalStringDiv = document.createElement("div");
+  // let finalStringText = document.createElement("span");
+  // finalStringDiv.id = "finalString";
+  // finalStringDiv.className = "final-string response";
+  // finalStringText.innerText = `Constructed String: ${finalString}`;
+  // finalStringDiv.appendChild(finalStringText);
+  // messagesContainer.appendChild(finalStringDiv);
+}
 
-// //   for (const key in data) {
-// //     if (Object.prototype.hasOwnProperty.call(data, key)) {
-// //       if(key=== "Timestamp'"){
+function fetchExternalData(url,input) {
+  var myHeaders = new Headers();
+  myHeaders.append("X-M2M-Origin", "iiith_guest:iiith_guest");
+  myHeaders.append("Accept", "application/json");
 
-// //         const epochTimestamp =data[key];
-// //         const normalTime =new Date(epochTimestamp *1000).toLocaleString();
-// //         formattedData += `${key}: ${normalTime}\n`;
-// //       }
-// //       else{
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
+
+  fetch(url, requestOptions)
+    .then(response => response.json())
+    .then(result => {
       
-// //       formattedData += `${key}: ${data[key]}\n`;
-// //     }}
-// //   }
+      printFetchedData(result,input);
+    }
+      )
+    .catch(error => console.log('error', error));
+}
 
-//   addChat(input, formattedData);
-// }
+function printFetchedData(data,input) {
+  // Convert the data to a JSON string for printing
+  const dataString = JSON.stringify(data, null, 2);
+  
+  // Print the data in the chatbox
+  addChatMessages(input, dataString);
+}
+
 function compare(promptsArray, repliesArray, string) {
   let reply;
   let replyFound = false;
@@ -224,38 +208,6 @@ function compare(promptsArray, repliesArray, string) {
   }
   return reply;
 }
-
-// function addChat(input, product) {
-//   const messagesContainer = document.getElementById("messages");
-
-//   let userDiv = document.createElement("div");
-//   userDiv.id = "user";
-//   userDiv.className = "user response";
-//   userDiv.innerHTML = `<span>${input}</span>`;
-//   messagesContainer.appendChild(userDiv);
-
-//   let botDiv = document.createElement("div");
-//   let botImg = document.createElement("img");
-//   let botText = document.createElement("span");
-//   botDiv.id = "bot";
-//   //botImg.src = "images/bot-mini.png";
-//   //botImg.className = "avatar";
-//   botDiv.className = "bot response";
-//   botText.innerText = "Typing...";
-//   botDiv.appendChild(botText);
-//   botDiv.appendChild(botImg);
-//   messagesContainer.appendChild(botDiv);
-//   // Keep messages at most recent
-//   messagesContainer.scrollTop = messagesContainer.scrollHeight - messagesContainer.clientHeight;
-
-//   // Fake delay to seem "real"
-//   setTimeout(() => {
-//     botText.innerText = `${product}`;
-//     //textToSpeech(product)
-//   }, 2000
-//   )
-
-// }
 
 function addChat(message, options) {
   const messagesContainer = document.getElementById("messages");
@@ -279,7 +231,8 @@ function addChat(message, options) {
       for (const option of options) {
         let optionButton = document.createElement("button");
         optionButton.textContent = option.text;
-        optionButton.addEventListener("click", () => handleOptionClick(option.next));
+        optionButton.className = "chatbox__option";
+        optionButton.addEventListener("click", () => handleOptionClick(option.next, option.identifier));
         optionsDiv.appendChild(optionButton);
       }
 
@@ -291,7 +244,37 @@ function addChat(message, options) {
 
 
 
+function addChatMessages(input, product) {
+  const messagesContainer = document.getElementById("messages");
 
+  let userDiv = document.createElement("div");
+  userDiv.id = "user";
+  userDiv.className = "user response";
+  userDiv.innerHTML = `<span>${input}</span>`;
+  messagesContainer.appendChild(userDiv);
+
+  let botDiv = document.createElement("div");
+  let botImg = document.createElement("img");
+  let botText = document.createElement("span");
+  botDiv.id = "bot";
+  //botImg.src = "images/bot-mini.png";
+  //botImg.className = "avatar";
+  botDiv.className = "bot response";
+  botText.innerText = "Typing...";
+  botDiv.appendChild(botText);
+  botDiv.appendChild(botImg);
+  messagesContainer.appendChild(botDiv);
+  // Keep messages at most recent
+  messagesContainer.scrollTop = messagesContainer.scrollHeight - messagesContainer.clientHeight;
+
+  // Fake delay to seem "real"
+  setTimeout(() => {
+    botText.innerText = `${product}`;
+    //textToSpeech(product)
+  }, 2000
+  )
+
+}
 // Used to get the popup open and close 
 
 class Chatbox {
