@@ -3,8 +3,7 @@
 
 <head>
     <title>Chatbot</title>
-    <link rel="icon" href="images/graceview.png" />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style_chatbot.css" />
 </head>
 
 <body>
@@ -13,7 +12,7 @@
         <div class="chatbox__support">
             <div class="chatbox__header">
                 <div class="chatbox__image--header">
-                    <img src="./images/graceview.png" alt="image">
+                    <img src="./images/chatbot_logo.png" alt="image">
                 </div>
                 <div class="chatbox__content--header">
                     <h4 class="chatbox__heading--header">SCRC Chat Assistant</h4>
@@ -26,19 +25,20 @@
                     </button>
                 </div>
             </div>
-            
             <div class="chatbox__messages"  id="messages">
                 <div></div>
             </div>
             <div class="chatbox__footer">
                 <input id="input" type="text" placeholder="Write a message...">
                 
-                <button id="messages" class="chatbox__send--footer send__button" onclick="sendMessage()">Send</button>
-    
+                <!-- <button id="messages" class="chatbox__send--footer send__button" onclick="sendMessage()">Send</button>
+     -->
+                <button class="chatbox__send--footer send__button" id="sendButton">Send</button>
+
             </div>
         </div>
         <div class="chatbox__button">
-            <button><img src="./images/graceview.png" /></button>
+            <button><img src="./images/chatbot_avatar.png" /></button>
         </div>
     </div>
 </div>

@@ -23,20 +23,20 @@ body {
     height: 32px;
     border: none;
     background-color: transparent;
-    cursor: pointer;
-}
+    }
 
 .symbol {
     font-size: 24px;
-    color: black;
+    color: white;
     position: absolute;
-    top: 50%;
-    left: 50%;
+    bottom: 70%;
+    left: 60%;
     transform: translate(-50%, -50%);
     z-index: 1;
+    cursor: pointer;
 }
 
-.circle {
+/* .circle {
     width: 15px;
     height: 15px;
     border-radius: 50%;
@@ -46,7 +46,7 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 0;
-}
+} */
 
 .chatbox__support {
     display: flex;
@@ -105,7 +105,7 @@ body {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    padding: 15px 20px;
+    padding: 15px 8px;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
@@ -190,11 +190,11 @@ body {
   
   .bot.response {
     background-color: #123462;
-    color: #fff;
-    border-radius: 10px;
-    padding: 8px;
-    margin: 5px;
-    align-self: flex-start;
+    color: #E0E0E0;
+    font-size: 14px; /* Adjust the font size as needed */
+    padding: 5px 10px; /* Add padding for better spacing */
+    border-radius: 5px; /* Apply rounded corners */
+    margin-bottom: 5px;
   }
 
 
@@ -218,16 +218,23 @@ body {
     margin: 1%;
 }
 
+.options.response {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
 /* Styling for option buttons */
 .chatbox__option {
     padding: 8px 15px;
     background-color: #f0f0f0;
     border: none;
-    color: #123462;
+    color: #000000;
     cursor: pointer;
     border-radius: 20px;
     transition: background-color 0.3s ease, color 0.3s ease;
-    margin: 5px; /* Add margin between options */
+    margin: 5px 0; /* Add margin only on top and bottom to separate options */
+    display: block;
 }
 
 .chatbox__option:hover {
@@ -249,3 +256,5 @@ body {
         margin: 10vw;
     }
 }
+
+

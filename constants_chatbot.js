@@ -1,5 +1,5 @@
 // Options the user could type in
-const prompts = [
+export const prompts = [
   ["hi", "hey", "hello", "good morning", "good afternoon"],
   ["what do you do", "what can you do", "what is your purpose"],
   ["ah", "yes", "ok", "okay", "nice"],
@@ -11,7 +11,7 @@ const prompts = [
 
 // Possible responses, in corresponding order
 
-const replies = [
+export const replies = [
   ["Hello!", "Hi!", "Hey!", "Hi there!"],
   ["I fetch details from the dashboard",
     "I help find the parameters of different locations"],
@@ -23,7 +23,7 @@ const replies = [
 
 // Random for any other user input
 
-const alternative = [
+export const alternative = [
   "Try again",
   "I'm listening...",
   "I don't understand :/"
