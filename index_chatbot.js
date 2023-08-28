@@ -13,6 +13,7 @@ function sendMessage() {
  
   if (currentConversationNode.input) {
     userInput = input; // Store user input
+    processInput(input)
     console.log(userInput)
     //output(currentConversationNode.message, currentConversationNode.options);
   } else if (currentConversationNode.nodes && currentConversationNode.nodes[input]) {
@@ -43,9 +44,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const isValidInput = input.length === 2 && [...input].every(char => char.charCodeAt(0) >= 48 && char.charCodeAt(0) <= 57);
   
       if (isValidInput) {
+        userInput = input;
         console.log("Enter button", userInput);
         updateChatAndConstructString(userInput);
-        output(input);
+        //output(input);
       } else {
         processInput(input);
       }
@@ -57,6 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
   sendButton.addEventListener("click", () => {
     let input = inputField.value;
     inputField.value = "";
+    userInput = input;
     sendMessage(input); // Call sendMessage function with the user's input
   });
 });
@@ -93,6 +96,7 @@ function processInput(input) {
 
   // Update DOM
   addChatMessages(input, product);
+  currentConversationNode = conversationTree;
   output(currentConversationNode.message, currentConversationNode.options);
 }
 
@@ -192,14 +196,6 @@ function updateChatAndConstructString(updateduserInput) {
     fetchExternalData(apiUrl, finalString);
   }
   
-  // const messagesContainer = document.getElementById("messages");
-  // let finalStringDiv = document.createElement("div");
-  // let finalStringText = document.createElement("span");
-  // finalStringDiv.id = "finalString";
-  // finalStringDiv.className = "final-string response";
-  // finalStringText.innerText = `Constructed String: ${finalString}`;
-  // finalStringDiv.appendChild(finalStringText);
-  // messagesContainer.appendChild(finalStringDiv);
 }
 
 function fetchExternalData(url,input) {
@@ -213,28 +209,32 @@ function fetchExternalData(url,input) {
     redirect: 'follow'
   };
 
+  
   fetch(url, requestOptions)
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
     .then(result => {
-      
-      printFetchedData(result,input);
-    }
-      )
-    .catch(error => console.log('error', error));
+      printFetchedData(result, input);
+    })
+    .catch(error => {
+      console.log('Error:', error);
+      const errorMessage = "An error occurred while fetching data. Please try again later.";
+      addChatMessages(input, errorMessage);
+      setTimeout(() => {
+        currentConversationNode = conversationTree;
+        output(currentConversationNode.message, currentConversationNode.options);
+      }, 1000);
+    });
 }
 
 function printFetchedData(data,input) {
   // Convert the data to a JSON string for printing
   const dataString = JSON.stringify(data, null, 2);
   const parsedData = JSON.parse(dataString);
-  //const modifiedData = { ...parsedData };
-  // if (parsedData['Timestamp']) {
-  //   const timestamp = new Date(parsedData['Timestamp'] * 1000);
-  //   const formattedTimestamp = `${timestamp.toLocaleDateString()} ${timestamp.toLocaleTimeString()}`;
-  //   parsedData['Timestamp'] = formattedTimestamp;
-  // }
-
-  // Construct the formatted data string
   let formattedData = '';
   for (const key in data) {
           if (Object.prototype.hasOwnProperty.call(data, key)) {
@@ -249,35 +249,13 @@ function printFetchedData(data,input) {
               formattedData += `${key.replace("'", '')}: ${parsedData[key]}\n`;
           }}
   }
-  // for (const key in parsedData) {
-  //   formattedData += `${key.replace("'", '')}: ${parsedData[key]}\n`;
-  // }
-
-  // Print the formatted data in the chatbox
   addChatMessages(input, formattedData);
+  setTimeout(() => {
+    currentConversationNode = conversationTree;
+    output(currentConversationNode.message, currentConversationNode.options);
+  }, 1000); // Adjust the delay time as needed
 }
 
-// function printFetchedData(data, input) {
-//     let formattedData = "";
-  
-//     for (const key in data) {
-//       if (Object.prototype.hasOwnProperty.call(data, key)) {
-//         if(key=== "Timestamp'"){
-  
-//           const epochTimestamp =data[key];
-//           const normalTime =new Date(epochTimestamp *1000).toLocaleString();
-//           formattedData += `${key}: ${normalTime}\n`;
-//         }
-//         else{
-       
-//         formattedData += `${key}: ${data[key]}\n`;
-//       }}
-//     }
-  
-//     addChat(input, formattedData);
-//   }
-  
-  
 function compare(promptsArray, repliesArray, string) {
   let reply;
   let replyFound = false;
