@@ -393,8 +393,12 @@ function handleOptionClick(nextNode, identifier) {
   }
   else if (selectedVerticalIdentifier === "SR")
   {
-    finalString = `${newselectedVerticalIdentifier}-GW-${selectedBuildingIdentifier}${selectedFloorIdentifier}-${updateduserInput}`;
+      if(newselectedVerticalIdentifier === "SR-OC")
+      finalString = `${newselectedVerticalIdentifier}-GW-${selectedBuildingIdentifier}${selectedFloorIdentifier}-${updateduserInput}`;
+      else
+      finalString = `${newselectedVerticalIdentifier}-${selectedBuildingIdentifier}${selectedFloorIdentifier}-${updateduserInput}`;
   }
+  
    else
    finalString = `${newselectedVerticalIdentifier}-${selectedBuildingIdentifier}${selectedFloorIdentifier}-${updateduserInput}`;
   console.log("First String:", firstString);
