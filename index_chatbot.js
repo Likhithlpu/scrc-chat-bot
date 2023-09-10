@@ -23,44 +23,6 @@ function sendMessage() {
   }
 }
 
-
-// document.addEventListener("DOMContentLoaded", () => {
-//   const inputField = document.getElementById("input");
-//   const sendButton = document.getElementById("sendButton");
-  
-//   output(currentConversationNode.message, currentConversationNode.options);
-
-//   inputField.addEventListener("keydown", (e) => {
-//      if (e.code === "Enter"||e.code === "NumpadEnter") {
-//       let input = inputField.value;
-//       inputField.value = "";
-//       // userInput = input;
-//       // console.log("Enter button",userInput)
-//       // updateChatAndConstructString(userInput)   
-
-//       const isValidInput = input.length === 2 && [...input].every(char => char.charCodeAt(0) >= 48 && char.charCodeAt(0) <= 57);
-
-//       if (isValidInput) {
-//         userInput = input;
-//         console.log("Enter button", userInput);
-//         updateChatAndConstructString(userInput);
-//         //output(input);
-//       } else {
-//         processInput(input);
-//       }
-//     }
-//   });
-
-  //const sendButton = document.getElementById("sendButton");
-
-//   sendButton.addEventListener("click", () => {
-//     let input = inputField.value;
-//     inputField.value = "";
-//     userInput = input;
-//     sendMessage(input); // Call sendMessage function with the user's input
-//   });
-// });
-
 document.addEventListener("DOMContentLoaded", () => {
   const inputField = document.getElementById("input");
   //const sendButton = document.getElementById("sendButton");
@@ -571,51 +533,121 @@ function handleOptionClick(nextNode, identifier) {
   }
   // Used to get the popup open and close 
 
+  // class Chatbox {
+  //   constructor() {
+  //     this.args = {
+  //       openButton: document.querySelector('.chatbox__button'),
+  //       chatBox: document.querySelector('.chatbox__support'),
+  //       sendButton: document.querySelector('.send__button'),
+  //       minimizeButton: document.querySelector('.minimize-btn'), // New minimize button
+
+
+
+  //     };
+
+
+  //     this.state = false;
+  //     this.messages = [];
+  //   }
+
+  //   display() {
+  //     const { openButton, chatBox, sendButton, minimizeButton } = this.args;
+
+
+  //     openButton.addEventListener('click', () => this.toggleState(chatBox));
+  //     //console.log("Called togglestate");
+  //     minimizeButton.addEventListener('click', () => this.toggleState(chatBox)); // Minimize button event listener
+  //     sendButton.addEventListener('click', () => this.onSendButton(chatBox));
+
+  //     const node = chatBox.querySelector('input');
+  //     node.addEventListener("keyup", ({ key }) => {
+  //       if (key === "Enter") {
+  //         this.onSendButton(chatBox);
+  //       }
+  //     });
+  //   }
+
+  //   toggleState(chatbox) {
+  //     //console.log("Inside function toggle");
+  //     this.state = !this.state;
+
+  //     // show or hides the box
+  //     if (this.state) {
+  //       chatbox.classList.add('chatbox--active')
+  //     } else {
+  //       chatbox.classList.remove('chatbox--active')
+  //     }
+  //   }
+
   class Chatbox {
     constructor() {
-      this.args = {
-        openButton: document.querySelector('.chatbox__button'),
-        chatBox: document.querySelector('.chatbox__support'),
-        sendButton: document.querySelector('.send__button'),
-        minimizeButton: document.querySelector('.minimize-btn'), // New minimize button
-
-
-
-      };
-
-
-      this.state = false;
-      this.messages = [];
+        this.args = {
+            openButton: document.querySelector('.chatbox__button'),
+            chatBox: document.querySelector('.chatbox__support'),
+            sendButton: document.querySelector('.send__button'),
+            minimizeButton: document.querySelector('.minimize-btn'), // New minimize button
+  
+  
+  
+        };
+        
+  
+        this.state = false;
+        this.messages = [];
+        this.resetChat = this.resetChat.bind(this);
+  
+        setTimeout(this.resetChat, 30 * 60 * 1000);
+  
+        const closeButton = document.querySelector(".close-btn");
+        closeButton.addEventListener("click", () => {
+          const confirmClose = confirm('Are you sure you want to close the chat? This will delete all chat history.');
+        if (confirmClose) {
+  
+    //       currentConversationNode = conversationTree;
+    // output(currentConversationNode.message, currentConversationNode.options);
+          this.toggleState(this.args.chatBox); // Close the chatbox
+          this.resetChat();}
+        });
     }
-
+  
     display() {
-      const { openButton, chatBox, sendButton, minimizeButton } = this.args;
-
-
-      openButton.addEventListener('click', () => this.toggleState(chatBox));
-      //console.log("Called togglestate");
-      minimizeButton.addEventListener('click', () => this.toggleState(chatBox)); // Minimize button event listener
-      sendButton.addEventListener('click', () => this.onSendButton(chatBox));
-
-      const node = chatBox.querySelector('input');
-      node.addEventListener("keyup", ({ key }) => {
-        if (key === "Enter") {
-          this.onSendButton(chatBox);
-        }
-      });
+        const {openButton, chatBox, sendButton,minimizeButton} = this.args;
+        
+        
+        openButton.addEventListener('click', () => this.toggleState(chatBox));
+        minimizeButton.addEventListener('click', () => this.toggleState(chatBox)); // Minimize button event listener
+        sendButton.addEventListener('click', () => this.onSendButton(chatBox));
+  
+        const node = chatBox.querySelector('input');
+        node.addEventListener("keyup", ({key}) => {
+            if (key === "Enter") {
+                this.onSendButton(chatBox);
+            }
+        });
     }
-
+  
     toggleState(chatbox) {
-      //console.log("Inside function toggle");
-      this.state = !this.state;
-
-      // show or hides the box
-      if (this.state) {
-        chatbox.classList.add('chatbox--active')
-      } else {
-        chatbox.classList.remove('chatbox--active')
-      }
+        this.state = !this.state;
+  
+        // show or hides the box
+        if(this.state) {
+            chatbox.classList.add('chatbox--active')
+        } else {
+            chatbox.classList.remove('chatbox--active')
+        }
     }
+  
+    resetChat() {
+      const messagesContainer = document.getElementById("messages");
+      // Clear all chat messages except the first one
+      while (messagesContainer.childElementCount > 1) {
+        messagesContainer.removeChild(messagesContainer.lastChild);
+      }
+      // Reset the current conversation node to the initial state
+      currentConversationNode = conversationTree;
+      output(currentConversationNode.message, currentConversationNode.options);
+    }
+  
 
     onSendButton(chatbox) {
       var textField = chatbox.querySelector('input');

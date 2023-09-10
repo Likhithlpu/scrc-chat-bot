@@ -25,16 +25,34 @@ body {
     background-color: transparent;
     }
 
-.symbol {
-    font-size: 24px;
-    color: white;
-    position: absolute;
-    bottom: 70%;
-    left: 60%;
-    transform: translate(-50%, -50%);
-    z-index: 1;
-    cursor: pointer;
-}
+    .symbol {
+        font-size: 24px;
+        color: white;
+        position: absolute;
+        bottom: 70%;
+        left: 30%;
+        transform: translate(-50%, -50%);
+        z-index: 1;
+        cursor: pointer;
+    }
+    
+    .close-btn {
+        position: relative;
+        height: 2px;
+        border: none;
+        
+        }
+    
+    .symbolx {
+        font-size: 15px;
+        color: #ffffff;
+        position: absolute;
+        bottom: 1150%;
+        right: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1;
+        cursor: pointer;
+    }
 
 /* .circle {
     width: 15px;
