@@ -3,6 +3,7 @@ import { prompts, replies, alternative } from './constants_chatbot.js'
 
 let currentConversationNode = conversationTree;
 let userInput = "";
+let chatboxInstance;
 
 function sendMessage() {
   const inputField = document.getElementById("input");
@@ -51,7 +52,9 @@ document.addEventListener("DOMContentLoaded", () => {
         processInput(input);
       }
     }
-  })
+  });
+  chatboxInstance = new Chatbox();
+  chatboxInstance.display();
 });
 
 
@@ -292,6 +295,7 @@ function handleOptionClick(nextNode, identifier) {
 
 
     }
+    chatboxInstance.resetChatTimer();
     setTimeout(() => {
       output(currentConversationNode.message, currentConversationNode.options);
       //   currentConversationNode = conversationTree;
@@ -594,9 +598,10 @@ function handleOptionClick(nextNode, identifier) {
   
         this.state = false;
         this.messages = [];
-        this.resetChat = this.resetChat.bind(this);
+        //this.resetChat = this.resetChat.bind(this);
+        this.resetChatTimeout = null;
   
-        setTimeout(this.resetChat, 30 * 60 * 1000);
+        //setTimeout(this.resetChat, 30 * 60 * 1000);
   
         const closeButton = document.querySelector(".close-btn");
         closeButton.addEventListener("click", () => {
@@ -606,6 +611,7 @@ function handleOptionClick(nextNode, identifier) {
     //       currentConversationNode = conversationTree;
     // output(currentConversationNode.message, currentConversationNode.options);
           this.toggleState(this.args.chatBox); // Close the chatbox
+          //this.resetChat();}
           this.resetChat();}
         });
     }
@@ -614,14 +620,23 @@ function handleOptionClick(nextNode, identifier) {
         const {openButton, chatBox, sendButton,minimizeButton} = this.args;
         
         
-        openButton.addEventListener('click', () => this.toggleState(chatBox));
+        //openButton.addEventListener('click', () => this.toggleState(chatBox));
+        openButton.addEventListener('click', () =>{
+          this.toggleState(chatBox);  
+          this.resetChatTimer();
+         });
         minimizeButton.addEventListener('click', () => this.toggleState(chatBox)); // Minimize button event listener
-        sendButton.addEventListener('click', () => this.onSendButton(chatBox));
+       // sendButton.addEventListener('click', () => this.onSendButton(chatBox));
+       sendButton.addEventListener('click', () =>{
+        this.onSendButton(chatBox);
+        this.resetChatTimer();
+      });
   
         const node = chatBox.querySelector('input');
         node.addEventListener("keyup", ({key}) => {
             if (key === "Enter") {
                 this.onSendButton(chatBox);
+                this.resetChatTimer();
             }
         });
     }
@@ -637,17 +652,43 @@ function handleOptionClick(nextNode, identifier) {
         }
     }
   
+    // resetChat() {
+    //   const messagesContainer = document.getElementById("messages");
+    //   // Clear all chat messages except the first one
+    //   while (messagesContainer.childElementCount > 1) {
+    //     messagesContainer.removeChild(messagesContainer.lastChild);
+    //   }
+    //   // Reset the current conversation node to the initial state
+    //   currentConversationNode = conversationTree;
+    //   output(currentConversationNode.message, currentConversationNode.options);
+    // }
+  
     resetChat() {
-      const messagesContainer = document.getElementById("messages");
-      // Clear all chat messages except the first one
+      const messagesContainer = document.getElementById("messages");  
+      // Clear all chat messages except the first one  
       while (messagesContainer.childElementCount > 1) {
-        messagesContainer.removeChild(messagesContainer.lastChild);
-      }
-      // Reset the current conversation node to the initial state
-      currentConversationNode = conversationTree;
-      output(currentConversationNode.message, currentConversationNode.options);
+          messagesContainer.removeChild(messagesContainer.lastChild);
+        }
+        // Reset the current conversation node to the initial state
+        currentConversationNode = conversationTree;  
+      output(currentConversationNode.message, currentConversationNode.options);  
     }
   
+   
+  
+    resetChatTimer() {  
+      // Clear the existing timeout (if any)
+        if (this.resetChatTimeout) {  
+        clearTimeout(this.resetChatTimeout);  
+      }
+  
+   
+  
+      // Set a new timeout for resetting the chat after 1 minute of inactivity
+        this.resetChatTimeout = setTimeout(() => {
+          this.resetChat();
+        }, 1 * 60 * 1000);  
+    }
 
     onSendButton(chatbox) {
       var textField = chatbox.querySelector('input');
