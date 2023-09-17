@@ -25,13 +25,23 @@ const conversationTree = {
     CommonBuildingNode: {
       message: "Which building data do you need? Please select a building by entering the corresponding number:\n1. Vindhya\n2. Nilgiri\n3. Admin\n4. T-Hub\n5. Kohli\n6. Anand",
       options: [
-        { text: "1", identifier: "VN", next: "FinalBuildingNode" },
-        { text: "2", identifier: "NI", next: "FinalBuildingNode" },
-        { text: "3", identifier: "AD", next: "FinalBuildingNode" },
-        { text: "4", identifier: "TH", next: "FinalBuildingNode" },
-        { text: "5", identifier: "KB", next: "FinalBuildingNode" },
-        { text: "6", identifier: "AN", next: "FinalBuildingNode" },
+        { text: "1", identifier: "VN", next: "OperationBuildingNode" },
+        { text: "2", identifier: "NI", next: "OperationBuildingNode" },
+        { text: "3", identifier: "AD", next: "OperationBuildingNode" },
+        { text: "4", identifier: "TH", next: "OperationBuildingNode" },
+        { text: "5", identifier: "KB", next: "OperationBuildingNode" },
+        { text: "6", identifier: "AN", next: "OperationBuildingNode" },
         // ... other building options ...
+      ],
+    },
+
+    OperationBuildingNode: {
+      message: "Which value do you need? Please select an option by entering the corresponding number:\n1. Average value\n2. Maximum value\n3. Minimum value",
+      options: [
+        { text: "1", identifier: "building_avg", next: "FinalBuildingNode" },
+        { text: "2", identifier: "building_max", next: "FinalBuildingNode" },
+        { text: "3", identifier: "building_min", next: "FinalBuildingNode" },
+        // ... other value options ...
       ],
     },
     

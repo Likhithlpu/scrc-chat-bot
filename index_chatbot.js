@@ -139,17 +139,19 @@ let newselectedVerticalIdentifier="";
 let selectedBuildingIdentifier = "";
 let selectedFloorIdentifier = "";
 let selectedOperation = "";
+let flag = "";
 //let selectedNodeIdentifier = "";
 
 async function fetchDataFromBackend(vertical, operation, building) {
   const baseUrl = "http://localhost:4000"; // Replace with your backend server URL
   let endpoint; 
   console.log("Enterd fetchdata function");
-  if (building) {
+  if (building && flag==="building") {
+    console.log(building);
     endpoint = `/pg/${vertical}/${operation}/${building}`;
     console.log("building condition")
   }
-  else{
+  else if(flag==="vertical"){
     endpoint = `/pg/${vertical}/${operation}`;
     console.log("vertical condtion")
   }
@@ -178,18 +180,6 @@ async function fetchDataFromBackend(vertical, operation, building) {
 
 function handleOptionClick(nextNode, identifier) {
   currentConversationNode = conversationTree.nodes[nextNode];
-  //console.log(currentConversationNode);
-
-  // if (identifier) {
-  //   if (currentConversationNode === conversationTree.nodes.NodeSp) {
-  //     selectedVerticalIdentifier = identifier;
-  //   } else if (currentConversationNode === conversationTree.nodes.FloorNode) {
-  //     selectedBuildingIdentifier = identifier;
-  //   } else if (currentConversationNode === conversationTree.nodes.FinalNode) {
-  //     selectedFloorIdentifier = identifier;
-  //     //updateChatAndConstructString(userInput);
-  //   }
-  // }
 
    if (currentConversationNode === conversationTree.nodes.EnergyMonitoringTypeNode || currentConversationNode === conversationTree.nodes.SmartRoomTypeNode || currentConversationNode === conversationTree.nodes.WaterMonitoringTypeNode|| currentConversationNode === conversationTree.nodes.WiSunTypeNode ) {
       selectedVerticalIdentifier = identifier; //
@@ -214,10 +204,13 @@ function handleOptionClick(nextNode, identifier) {
   if (identifier) {
     if (currentConversationNode === conversationTree.nodes.CommonVerticalNode) {
       selectedVerticalIdentifier = identifier;
+      console.log("vertical - vertical")
       console.log(selectedVerticalIdentifier);// Store the chosen vertical
     } else if (currentConversationNode === conversationTree.nodes.FinalVerticalNode) {
       selectedOperation = identifier;
-      console.log(selectedOperation);// Store the chosen operation
+      console.log("vertical - opertion")
+      console.log(selectedOperation); 
+      flag = "vertical";// Store the chosen operation
     }
   }
 
@@ -248,20 +241,31 @@ function handleOptionClick(nextNode, identifier) {
 
 
   if (identifier) {
-    // if (currentConversationNode === conversationTree.nodes.BuildingNode){
-    //   selectedOperation = 'building';
-    //   console.log(selectedOperation);
-    // }
    if (currentConversationNode === conversationTree.nodes.CommonBuildingNode) {
       selectedVerticalIdentifier = identifier; 
+      console.log("building - vertical")
       console.log(selectedVerticalIdentifier);
     // Store the chosen vertical
-    } else if (currentConversationNode === conversationTree.nodes.FinalBuildingNode) {
-      //console.log(currentConversationNode);
+    }else if (currentConversationNode === conversationTree.nodes.OperationBuildingNode) {
       selectedBuildingIdentifier = identifier; 
+      console.log("builging - building")
       console.log(selectedBuildingIdentifier);
-      selectedOperation = 'building';
-      console.log(selectedOperation);// Store the chosen operation
+      flag="building";
+      // selectedOperation = identifier;
+      // console.log("building - operation")
+      // console.log(selectedOperation);
+    } 
+    else if (currentConversationNode === conversationTree.nodes.FinalBuildingNode) {
+      //console.log(currentConversationNode);
+      // selectedBuildingIdentifier = identifier; 
+      // console.log("builging - building")
+      // console.log(selectedBuildingIdentifier);
+      // flag="building";
+      // selectedOperation = 'building';
+      selectedOperation = identifier;
+      console.log("building - operation")
+      console.log(selectedOperation);
+      // console.log(selectedOperation);// Store the chosen operation
     }
   }
 
@@ -269,7 +273,7 @@ function handleOptionClick(nextNode, identifier) {
     //currentConversationNode = conversationTree;
     //addChat(currentConversationNode.message, currentConversationNode.options);
 
-      if (selectedBuildingIdentifier && selectedOperation == 'building' && selectedVerticalIdentifier) {
+      if (selectedBuildingIdentifier && selectedOperation && selectedVerticalIdentifier) {
         fetchDataFromBackend(selectedVerticalIdentifier, selectedOperation, selectedBuildingIdentifier)
           .then(response => {
             // Handle the response from the backend
@@ -283,7 +287,7 @@ function handleOptionClick(nextNode, identifier) {
               }
             }
             // Display the formatted response in the chatbox
-            addChatMessages(`Average for ${selectedBuildingIdentifier}`,formattedResponse);
+            addChatMessages(`${selectedOperation} for ${selectedBuildingIdentifier}`,formattedResponse);
             selectedOperation = "";
             selectedBuildingIdentifier="";
             selectedVerticalIdentifier = "";
@@ -307,26 +311,6 @@ function handleOptionClick(nextNode, identifier) {
     //console.log(currentConversationNode.message);
 
   }
-
-  // function updateChatAndConstructString(updateduserInput) {
-
-  //   // Construct the concatenated string based on selected identifiers
-  //   //const finalString = `${selectedVerticalIdentifier}-${selectedBuildingIdentifier}${selectedFloorIdentifier}-${selectedNodeIdentifier}`;
-  //   //console.log("Inside function",updateduserInput)
-  //   const firstString = `AE-${selectedVerticalIdentifier}`;
-  //   const finalString = `${selectedVerticalIdentifier}-${selectedBuildingIdentifier}${selectedFloorIdentifier}-${updateduserInput}`;
-  //   // Update the chat or display the finalString wherever you want
-  //   // For example, you can display it in the chatbox:
-  //   console.log("First String:", firstString);
-  //   console.log("Second String:", finalString);
-  //   const apiUrl = `http://localhost:4000/data/${firstString}/${finalString}`;
-  //   console.log("API URL:", apiUrl);
-  //   if (currentConversationNode === conversationTree.nodes.FinalNode) {
-  //     fetchExternalData(apiUrl, finalString);
-
-  //   }
-
-  // }
 
   function updateChatAndConstructString(updateduserInput) {
    let firstString = "";
@@ -535,53 +519,7 @@ function handleOptionClick(nextNode, identifier) {
     )
 
   }
-  // Used to get the popup open and close 
 
-  // class Chatbox {
-  //   constructor() {
-  //     this.args = {
-  //       openButton: document.querySelector('.chatbox__button'),
-  //       chatBox: document.querySelector('.chatbox__support'),
-  //       sendButton: document.querySelector('.send__button'),
-  //       minimizeButton: document.querySelector('.minimize-btn'), // New minimize button
-
-
-
-  //     };
-
-
-  //     this.state = false;
-  //     this.messages = [];
-  //   }
-
-  //   display() {
-  //     const { openButton, chatBox, sendButton, minimizeButton } = this.args;
-
-
-  //     openButton.addEventListener('click', () => this.toggleState(chatBox));
-  //     //console.log("Called togglestate");
-  //     minimizeButton.addEventListener('click', () => this.toggleState(chatBox)); // Minimize button event listener
-  //     sendButton.addEventListener('click', () => this.onSendButton(chatBox));
-
-  //     const node = chatBox.querySelector('input');
-  //     node.addEventListener("keyup", ({ key }) => {
-  //       if (key === "Enter") {
-  //         this.onSendButton(chatBox);
-  //       }
-  //     });
-  //   }
-
-  //   toggleState(chatbox) {
-  //     //console.log("Inside function toggle");
-  //     this.state = !this.state;
-
-  //     // show or hides the box
-  //     if (this.state) {
-  //       chatbox.classList.add('chatbox--active')
-  //     } else {
-  //       chatbox.classList.remove('chatbox--active')
-  //     }
-  //   }
 
   class Chatbox {
     constructor() {
@@ -611,7 +549,6 @@ function handleOptionClick(nextNode, identifier) {
     //       currentConversationNode = conversationTree;
     // output(currentConversationNode.message, currentConversationNode.options);
           this.toggleState(this.args.chatBox); // Close the chatbox
-          //this.resetChat();}
           this.resetChat();}
         });
     }
@@ -652,26 +589,15 @@ function handleOptionClick(nextNode, identifier) {
         }
     }
   
-    // resetChat() {
-    //   const messagesContainer = document.getElementById("messages");
-    //   // Clear all chat messages except the first one
-    //   while (messagesContainer.childElementCount > 1) {
-    //     messagesContainer.removeChild(messagesContainer.lastChild);
-    //   }
-    //   // Reset the current conversation node to the initial state
-    //   currentConversationNode = conversationTree;
-    //   output(currentConversationNode.message, currentConversationNode.options);
-    // }
-  
     resetChat() {
-      const messagesContainer = document.getElementById("messages");  
-      // Clear all chat messages except the first one  
+      const messagesContainer = document.getElementById("messages");
+      // Clear all chat messages except the first one
       while (messagesContainer.childElementCount > 1) {
-          messagesContainer.removeChild(messagesContainer.lastChild);
-        }
-        // Reset the current conversation node to the initial state
-        currentConversationNode = conversationTree;  
-      output(currentConversationNode.message, currentConversationNode.options);  
+        messagesContainer.removeChild(messagesContainer.lastChild);
+      }
+      // Reset the current conversation node to the initial state
+      currentConversationNode = conversationTree;
+      output(currentConversationNode.message, currentConversationNode.options);
     }
   
    
